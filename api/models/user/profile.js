@@ -10,6 +10,11 @@ const UserProfile = connection.define("TBL_USER_PROFILE", {
         autoIncrement: true
     },
 
+    mobileNumber: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
+
     userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
