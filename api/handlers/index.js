@@ -1,3 +1,3 @@
 const authHandlers = require("./auth");
-
-module.exports = {authHandlers};
+const patientHandler = require("./patients");
+module.exports = {authHandlers, patientHandler};

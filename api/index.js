@@ -3,7 +3,8 @@ const cors = require("cors");
 
 const utils = require('./utils');
 const bodyParser = require("body-parser");
-const { authRoutes } = require("./routes");
+const { authRoutes, patientRoutes } = require("./routes");
+
 
 
 const app = express();
@@ -20,6 +21,8 @@ utils.connection.sync().then(() => {
 });
 
 app.use('/api/auth', authRoutes);
+
+app.use('/api/patient', patientRoutes);
 
 app.listen(8080, () => {
     console.log("Server running on port 8080");

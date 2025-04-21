@@ -1,3 +1,4 @@
 const connection = require("./databaseConnection");
+const responseUtil = require("./responseUtil");
 
-module.exports = { connection };
+module.exports = { connection, responseUtil };

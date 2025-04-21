@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const { userUtils } = require("../../models/user");
-const { responseUtil, errorMessageUtil, payloadUtil } = require("../../utils/responseUtil");
+const { getResponse, errorMessageUtil, payloadUtil } = require("../../utils/responseUtil");
 const { SALT_ROUNDS } = require("../../constants/apiConstants");
 
 /*
@@ -12,7 +12,7 @@ const { SALT_ROUNDS } = require("../../constants/apiConstants");
 const signupHandler = async (req, res) => {
     
     if(!req.body) {
-        return responseUtil(res, 400, errorMessageUtil("Invalid Payload"));
+        return getResponse(res, 400, errorMessageUtil("Invalid Payload"));
     } 
 
     const emailId = req.body.emailId;
@@ -23,12 +23,12 @@ const signupHandler = async (req, res) => {
             const data = await userUtils.getUserDataWithEmail(emailId);
 
             if(data) {
-                return responseUtil(res, 403, errorMessageUtil("EmailId already exists"));
+                return getResponse(res, 403, errorMessageUtil("EmailId already exists"));
             }
 
             bcrypt.genSalt(SALT_ROUNDS, async (err, salt) => {
                 if(err) {
-                    return responseUtil(res, 501, errorMessageUtil("Internal Server Error."));
+                    return getResponse(res, 501, errorMessageUtil("Internal Server Error."));
                 }
 
                 bcrypt.hash(
@@ -36,19 +36,19 @@ const signupHandler = async (req, res) => {
                     salt,
                     async (err, hash) => {
                         if (err) {
-                            return responseUtil(res, 501, errorMessageUtil("Internal Server Error while hashing."));
+                            return getResponse(res, 501, errorMessageUtil("Internal Server Error while hashing."));
                         } else {
                             const data = await userUtils.createUser(emailId, hash);
-                            return responseUtil(res, 200, payloadUtil({message : "User created successfully"}));
+                            return getResponse(res, 200, payloadUtil({message : "User created successfully"}));
                         }
                     }
                 )
             })
         } catch (err) {
-            return responseUtil(res, 501, errorMessageUtil(err.message));
+            return getResponse(res, 501, errorMessageUtil(err.message));
         }
     } else {
-        return responseUtil(res, 501, errorMessageUtil("Invalid payload data"));
+        return getResponse(res, 501, errorMessageUtil("Invalid payload data"));
     }
 } 
 

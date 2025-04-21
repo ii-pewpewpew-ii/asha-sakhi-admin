@@ -3,10 +3,6 @@ const { DataTypes } = require("sequelize");
 const connection = require("../../utils").connection;
 
 const Patient = connection.define("TBL_PROFILE_PATIENT", {
-    profileId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
 
     patientId: {
         type: DataTypes.INTEGER,
@@ -27,6 +23,16 @@ const Patient = connection.define("TBL_PROFILE_PATIENT", {
         type: DataTypes.TEXT
     },
 
+    firstName: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
+
+    lastName: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
+
     dateOfBirth: {
         type: DataTypes.DATE,
         allowNull: false
@@ -34,6 +40,11 @@ const Patient = connection.define("TBL_PROFILE_PATIENT", {
 
     deliveryDate: {
         type: DataTypes.DATE,
+    },
+
+    mobileNumber : {
+        type: DataTypes.TEXT,
+        allowNull: false
     }
 }, {
     freezeTableName: true

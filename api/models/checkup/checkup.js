@@ -20,6 +20,31 @@ const Checkup = connection.define("TBL_CHECKUP", {
         autoIncrement: true
     },
 
+    bloodPressure: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    
+    oxygen: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+    
+    weight: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+
+    temperature: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+
+    sugarLevel: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+
     checkupData: {
         type: DataTypes.BLOB
     },
