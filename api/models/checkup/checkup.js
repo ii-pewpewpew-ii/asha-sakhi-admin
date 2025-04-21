@@ -2,8 +2,8 @@ const { DataTypes } = require("sequelize");
 
 const connection = require("../../utils").connection;
 
-const Patient = connection.define("TBL_CHECKUP",{
-    workerId : {
+const Checkup = connection.define("TBL_CHECKUP", {
+    workerId: {
         type: DataTypes.INTEGER,
     },
 
@@ -19,7 +19,7 @@ const Patient = connection.define("TBL_CHECKUP",{
         primaryKey: true,
         autoIncrement: true
     },
-    
+
     checkupData: {
         type: DataTypes.BLOB
     },
@@ -28,9 +28,11 @@ const Patient = connection.define("TBL_CHECKUP",{
         type: DataTypes.TEXT
     },
 
-    checkupStatus : {
+    checkupStatus: {
         type: DataTypes.INTEGER
     },
+}, {
+    freezeTableName: true
 });
 
-module.exports = Patient;
+module.exports = Checkup;

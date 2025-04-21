@@ -2,32 +2,29 @@ const { DataTypes } = require("sequelize");
 
 const connection = require("../../utils").connection;
 
-const Doctor = connection.define("TBL_PROFILE_DOCTOR", {
-    profileId: {
+const Document = connection.define("TBL_DOCUMENTS", {
+    checkupId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        primaryKey: true,
     },
 
-    doctorId: {
+    documentId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true
     },
 
-    hospital: {
-        type: DataTypes.TEXT
+    documentPath: {
+        type: DataTypes.TEXT,
+        allowNull: false,
     },
 
-    city: {
+    documentName: {
         type: DataTypes.TEXT
     },
-
-    specialization: {
-        type: DataTypes.TEXT
-    }
 }, {
     freezeTableName: true
 });
 
-module.exports = Doctor;
+module.exports = Document;

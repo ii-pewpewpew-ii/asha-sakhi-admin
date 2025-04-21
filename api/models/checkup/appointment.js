@@ -2,41 +2,37 @@ const { DataTypes } = require("sequelize");
 
 const connection = require("../../utils").connection;
 
-const Patient = connection.define("TBL_PROFILE_PATIENT", {
-    profileId: {
+const Appointment = connection.define("TBL_APPOINTMENT", {
+    workerId: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        primaryKey: true
     },
 
     patientId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
+    },
+
+    appointmentId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
         autoIncrement: true
     },
 
-    state: {
-        type: DataTypes.TEXT
-    },
-
-    city: {
-        type: DataTypes.TEXT
-    },
-
-    languagePreference: {
-        type: DataTypes.TEXT
-    },
-
-    dateOfBirth: {
+    appointmentDate: {
         type: DataTypes.DATE,
         allowNull: false
     },
 
-    deliveryDate: {
-        type: DataTypes.DATE,
+    appointmentStatus: {
+        type: DataTypes.TEXT,
+        allowNull: false
     }
 }, {
     freezeTableName: true
 });
 
-module.exports = Patient;
+module.exports = Appointment;
