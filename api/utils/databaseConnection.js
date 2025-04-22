@@ -1,5 +1,6 @@
 const { Sequelize } = require("sequelize");
 const { databaseConfig } = require("../config");
+const { dialectOptions } = require("../config/databaseConfig");
 
 const sequelize = new Sequelize(
     databaseConfig.database,
@@ -7,7 +8,8 @@ const sequelize = new Sequelize(
     databaseConfig.password,
     {
         host : databaseConfig.host,
-        dialect : databaseConfig.dialect
+        dialect : databaseConfig.dialect,
+        dialectOptions: databaseConfig.dialectOptions
     }
 );
 
