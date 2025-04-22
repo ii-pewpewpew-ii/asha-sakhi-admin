@@ -1,0 +1,35 @@
+/*
+    route : /api/patient/patient-list
+    Method: GET
+    parameters: (Optional) [workerId]
+*/
+{
+	"data": [
+		{
+			"patientId": 1,
+			"state": "Tamil Nadu",
+			"city": "Chennai",
+			"languagePreference": "Tamil",
+			"firstName": "Anjali",
+			"lastName": "Ravi",
+			"dateOfBirth": "1990-05-14T18:30:00.000Z",
+			"deliveryDate": "2025-08-19T18:30:00.000Z",
+			"mobileNumber": "9876543210",
+			"createdAt": "2025-04-22T04:30:00.000Z",
+			"updatedAt": "2025-04-22T04:30:00.000Z"
+		},
+		{
+			"patientId": 2,
+			"state": "Tamil Nadu",
+			"city": "Chennai",
+			"languagePreference": "Tamil",
+			"firstName": "Anjali",
+			"lastName": "Ravi",
+			"dateOfBirth": "1990-05-14T18:30:00.000Z",
+			"deliveryDate": "2025-08-19T18:30:00.000Z",
+			"mobileNumber": "9876543210",
+			"createdAt": "2025-04-22T04:30:00.000Z",
+			"updatedAt": "2025-04-22T04:30:00.000Z"
+		}
+	]
+}

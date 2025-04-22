@@ -1,3 +1,3 @@
-const { fetchAllPatients } = require("./patient");
+const { fetchAllPatients, savePatient } = require("./patient");
 
-module.exports = {fetchAllPatients};
+module.exports = {fetchAllPatients, savePatient};

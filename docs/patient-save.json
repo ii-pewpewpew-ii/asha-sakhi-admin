@@ -1,0 +1,56 @@
+
+/* 
+    route : /api/patient/save-patient
+    Method: POST
+    parameters: jsonBody
+*/
+
+//for edit patientId needs to be sent.
+{
+	"patientId": 1, 
+  "patientData": {
+    "firstName": "Ananya",
+    "lastName": "Rao",
+    "state": "Karnataka",
+    "city": "Bangalore",
+    "languagePreference": "Kannada",
+    "dateOfBirth": "1992-06-15",
+		"mobileNumber":"1234567890",
+    "deliveryDate": "2025-08-10"
+  },
+  "vitals": {
+    "workerId": 101,
+    "bloodPressure": 120.5,
+    "oxygen": 98.0,
+    "temperature": 36.7,
+    "sugarLevel": 90.5,
+    "checkupData": "{\"notes\": \"Patient in good condition, no complications\"}",
+    "pregnancyStage": "Second Trimester",
+    "checkupStatus": 0
+  }
+}
+
+// for add patientId is neglected
+{
+    "patientData": {
+      "firstName": "Ananyaaa",
+      "lastName": "Rao",
+      "state": "Karnataka",
+      "city": "Bangalore",
+      "languagePreference": "Kannada",
+      "dateOfBirth": "1992-06-15",
+          "mobileNumber":"1234567890",
+      "deliveryDate": "2025-08-10"
+    },
+    "vitals": {
+      "workerId": 101,
+      "bloodPressure": 120.5,
+      "oxygen": 98.0,
+      "weight": 65.2,
+      "temperature": 36.7,
+      "sugarLevel": 90.5,
+      "checkupData": "{\"notes\": \"Patient in good condition, no complications\"}",
+      "pregnancyStage": "Second Trimester",
+      "checkupStatus": 0
+    }
+  }

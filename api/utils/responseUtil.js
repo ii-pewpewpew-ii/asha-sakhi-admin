@@ -1,4 +1,4 @@
-const responseUtil = (res, statusCode, payload) => {
+const getResponse = (res, statusCode, payload) => {
     return res.status(statusCode).json(payload);
 }
 
@@ -11,7 +11,7 @@ const payloadUtil = (data) =>{
 }
 
 module.exports = {
-    responseUtil,
+    getResponse,
     errorMessageUtil,
     payloadUtil
 }
