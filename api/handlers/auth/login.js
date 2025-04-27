@@ -1,13 +1,13 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { userUtils, roleUtil } = require("../../models/user");
+const { userUtils, roleUtil, UserProfile } = require("../../models/user");
 const { getResponse, errorMessageUtil, payloadUtil } = require("../../utils/responseUtil");
 const JWTDetails = require("../../config/jwt");
 
 /*
  PATHS : /api/auth/login
  POST : {mobileNumber,password}
- RESPONSE : {Status,message}
+ RESPONSE : {Status,message,token,userProfile}
 */
 
 const loginHandler = async (req, res) => {
@@ -36,10 +36,25 @@ const loginHandler = async (req, res) => {
                     if ( result === true ) {
                         const id = userData.userId;
                         const role = roleData.roleName;
-                        console.log(role);
+                        
+                        // Get user profile information
+                        const userProfile = await UserProfile.findOne({
+                            where: {
+                                userId: id
+                            },
+                            attributes: ['firstName', 'lastName']
+                        });
+
                         var token = jwt.sign({id, role}, JWTDetails.secret, {expiresIn : JWTDetails.jwtExpiration});
                         res.set("x-access-token", token);
-                        return getResponse(res, 200, payloadUtil({message : "Logged in successfully.", token : token}));
+                        return getResponse(res, 200, payloadUtil({
+                            message: "Logged in successfully.",
+                            token: token,
+                            profile: userProfile ? {
+                                firstName: userProfile.firstName,
+                                lastName: userProfile.lastName
+                            } : null
+                        }));
                     } else {
                         return getResponse(res, 401, errorMessageUtil("Incorrect password."))
                     }
@@ -53,9 +68,5 @@ const loginHandler = async (req, res) => {
         return getResponse(res, 501, errorMessageUtil("Internal Server error. Please try again later."));
     }
 }
-
-
-
-
 
 module.exports = {loginHandler};
