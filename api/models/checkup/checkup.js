@@ -40,6 +40,14 @@ const Checkup = connection.define("TBL_CHECKUP", {
         type: DataTypes.FLOAT,
     },
 
+    bmi: {
+        type: DataTypes.FLOAT
+    },
+
+    haemoglobin: {
+        type: DataTypes.TEXT
+    },
+
     checkupData: {
         type: DataTypes.TEXT
     },

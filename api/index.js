@@ -33,7 +33,6 @@ const options = {
 }
 
 const swaggerSpec = swaggerJsDoc(options);
-// cronUtil.scheduleJobs();
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

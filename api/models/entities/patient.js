@@ -1,4 +1,4 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes, TEXT } = require("sequelize");
 
 const connection = require("../../utils").connection;
 
@@ -42,10 +42,35 @@ const Patient = connection.define("TBL_PROFILE_PATIENT", {
         type: DataTypes.DATE,
     },
 
-    mobileNumber : {
+    mobileNumber: {
         type: DataTypes.TEXT,
         allowNull: false
-    }
+    },
+
+    employmentStatus: {
+        type: DataTypes.TEXT
+    },
+
+    religion: {
+        type: DataTypes.TEXT
+    },
+
+    education: {
+        type: DataTypes.TEXT
+    },
+
+    caste: {
+        type: DataTypes.TEXT
+    },
+    
+    bloodGroup: {
+        type: DataTypes.TEXT
+    },
+
+    previousIllness: {
+        type: DataTypes.TEXT
+    },
+
 }, {
     freezeTableName: true
 });

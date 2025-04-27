@@ -3,14 +3,12 @@ const {appointmentHandlers} = require('../handlers'); // import your handlers
 const responseUtil = require("./responseUtil")
 
 const scheduleJobs = (req, res) => {
-    console.log("[CRON] jobs setup")
-    cron.schedule('10 * * * * *', async () => {
-        console.log('[CRON] Running weekly Monday job');
+    cron.schedule('10 30 7 * * *', async () => {
+        console.log('[CRON] Triggering Appointment jobs for the day');
         await appointmentHandlers.sendAppointmentReminders();
     });
-    // cron.schedule("* * * * * *", () => {
-    //     console.log("here");
-    // })
+    console.log("[CRON] jobs setup")
+
     return responseUtil.getResponse(res, 200, "Cron started successfully")
 };
 

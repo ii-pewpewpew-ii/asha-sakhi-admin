@@ -1,5 +1,5 @@
 const { Patient } = require("../../models/entities");
-const { Checkup } = require("../../models/checkup");
+const { Checkup, Appointment } = require("../../models/checkup");
 const { responseUtil } = require('../../utils')
 
 
@@ -12,9 +12,10 @@ const savePatient = async (req, res) => {
         if (!patientId) {
             // Create Patient record, and checkup 0
             const vitals = req.body.vitals;
-            const patientData = await Patient.create(req.body.patientData);
+            vitals.workerId = req.body.workerId;
+            const patientData = await calculateDueDateAndScheduleAppointments(req.body.patientData, req.body.workerId);
             console.log("Patient Profile created successfully");
-            patientId = patientData.dataValues.patientId;
+            patientId = patientData.patientId;
             if (vitals) {
                 const checkupData = await Checkup.create({ ...vitals, ...{ patientId: patientId, checkupStatus: 0 } });
                 console.log("Vitals and test results stored successfully");
@@ -87,6 +88,85 @@ const fetchAllPatients = async (req, res) => {
         return responseUtil.getResponse(res, 501, responseUtil.errorMessageUtil(err))
     }
 }
+
+function calculateDueDate(patientData) {
+    const lmp = patientData.lmp;
+    if (!lmp) {
+        throw new Error('LMP (Last Menstrual Period) date is required.');
+    }
+
+    const lmpDate = new Date(lmp);
+    const dueDate = new Date(lmpDate);
+    dueDate.setDate(dueDate.getDate() + 280); 
+
+    patientData.deliveryDate = dueDate.toISOString().split('T')[0]; 
+    delete patientData.lmp;
+
+    return patientData;
+}
+
+
+async function calculateDueDateAndScheduleAppointments(patientData, workerId) {
+    const lmp = patientData.lmp;
+
+    if (!lmp) {
+        throw new Error('LMP (Last Menstrual Period) date is required.');
+    }
+
+    const lmpDate = new Date(lmp);
+    const dueDate = new Date(lmpDate);
+    dueDate.setDate(dueDate.getDate() + 280); 
+
+    patientData.deliveryDate = dueDate.toISOString().split('T')[0];
+    delete patientData.lmp;
+
+    const savedPatient = await Patient.create(patientData);
+    console.log(savedPatient);
+    const savedPatientData = savedPatient.dataValues
+
+    const patientId = savedPatientData.patientId;
+
+    const today = new Date();
+    const diffInMs = today - lmpDate;
+    const diffInWeeks = diffInMs / (1000 * 60 * 60 * 24 * 7);
+
+    console.log(`Pregnancy weeks passed: ${diffInWeeks.toFixed(2)} weeks`);
+
+    const appointmentsToSchedule = [];
+
+    const appointmentWindows = [
+        { visit: 1, minWeek: 0, maxWeek: 12, offsetFromLmp: 8 },  // around 8 weeks
+        { visit: 2, minWeek: 14, maxWeek: 26, offsetFromLmp: 20 }, // around 20 weeks
+        { visit: 3, minWeek: 28, maxWeek: 34, offsetFromLmp: 30 }, // around 30 weeks
+        { visit: 4, minWeek: 36, maxWeek: 40, offsetFromLmp: 37 }, // around 37 weeks
+    ];
+
+    appointmentWindows.forEach(({ visit, minWeek, maxWeek, offsetFromLmp }) => {
+        if (diffInWeeks < maxWeek) {
+            const appointmentDate = new Date(lmpDate);
+            appointmentDate.setDate(appointmentDate.getDate() + offsetFromLmp * 7); // convert weeks to days
+
+            appointmentsToSchedule.push({
+                workerId: patientData.workerId,  // assume you get workerId from patientData or elsewhere
+                patientId: patientId,
+                appointmentDate: appointmentDate,
+                appointmentStatus: 'Saved',
+                workerId: workerId
+            });
+        }
+    });
+
+    if (appointmentsToSchedule.length === 0) {
+        console.log('No appointments to schedule based on pregnancy weeks.');
+        return savedPatientData;
+    }
+
+    await Appointment.bulkCreate(appointmentsToSchedule);
+    
+    console.log('Appointments scheduled successfully.');
+    return savedPatientData;
+}
+
 
 module.exports = {
     fetchAllPatients,
