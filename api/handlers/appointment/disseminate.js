@@ -1,7 +1,7 @@
 const { Op } = require("sequelize");
 const { Appointment } = require("../../models/checkup"); 
 const { Patient, Worker } = require("../../models/entities");
-const { UserProfile } = require("../../models/user");
+const { UserProfile, User } = require("../../models/user");
 const client = require('../../config/twilio');
 const dotenv = require("dotenv");
 dotenv.config();
@@ -36,8 +36,13 @@ const sendAppointmentReminders = async () => {
                     profileId: workerProfile.dataValues.profileId
                 }
             });
+            const userData = await User.findOne({
+                where : {
+                    userId: userProfile.dataValues.userId
+                }
+            });
 
-            await sendWorkerMessage(patientData.dataValues, userProfile.dataValues.mobileNumber, appointment.dataValues.appointmentDate)
+            await sendWorkerMessage(patientData.dataValues, userData.dataValues.mobileNumber, appointment.dataValues.appointmentDate)
             await sendPatientMessage(patientData.dataValues, patientData.dataValues.mobileNumber, appointment.dataValues.appointmentDate)
 
             console.log("Message successfully sent");

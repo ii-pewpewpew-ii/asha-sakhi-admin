@@ -6,7 +6,7 @@ const JWTDetails = require("../../config/jwt");
 
 /*
  PATHS : /api/auth/login
- POST : {emailId,password}
+ POST : {mobileNumber,password}
  RESPONSE : {Status,message}
 */
 
@@ -15,15 +15,14 @@ const loginHandler = async (req, res) => {
         if(!req.body) {
             return getResponse(res, 400, errorMessageUtil("Invalid Payload"));
         } 
-        const emailId = req.body.emailId;
+        const mobileNumber = req.body.mobileNumber;
         const password = req.body.password;
-        if ( emailId && password) {
-            const userData = await userUtils.getUserDataWithEmail(emailId);
+        if ( mobileNumber && password) {
+            const userData = await userUtils.getUserDataWithMobileNumber(mobileNumber);
 
             if ( userData === null ) {
                 return getResponse(res, 401, errorMessageUtil("User is not registered")); 
             }
-            console.log(userData);
             bcrypt.compare(password, userData.password, async (err, result) => {
                 if (err) {
                     console.error(err);

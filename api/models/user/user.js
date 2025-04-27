@@ -4,15 +4,10 @@ const RoleUserMap = require("./roleUserMap");
 const connection = require("../../utils").connection;
  
 const User = connection.define("TBL_USER", {
-    emailId : {
+    mobileNumber: {
         type: DataTypes.TEXT,
         allowNull: false,
-        unique: true,
-        validate: {
-            isEmail: true,
-            notNull: true,
-            notEmpty: true
-        }
+        unique: true
     },
     
     password: {
@@ -40,10 +35,10 @@ User.hasOne(RoleUserMap, {
     sourceKey: "userId"
 })
 
-async function getUserDataWithEmail(emailId) {
+async function getUserDataWithMobileNumber(mobileNumber) {
     const data = await User.findOne({
         where: {
-            emailId: emailId
+            mobileNumber: mobileNumber
         }
     })
     if ([null, undefined].includes(data)) {
@@ -52,15 +47,15 @@ async function getUserDataWithEmail(emailId) {
     return data.dataValues;
 }
 
-async function createUser(emailId, hashedPassword) {
+async function createUser(mobileNumber, hashedPassword) {
     return await User.create({
-        emailId: emailId,
+        mobileNumber: mobileNumber,
         password: hashedPassword
     });
 }
 
 const userUtils = {
-    getUserDataWithEmail : getUserDataWithEmail,
+    getUserDataWithMobileNumber : getUserDataWithMobileNumber,
     createUser: createUser
 }
 module.exports = {User, userUtils};

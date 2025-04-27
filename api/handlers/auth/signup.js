@@ -5,7 +5,7 @@ const { SALT_ROUNDS } = require("../../constants/apiConstants");
 
 /*
  PATHS : /api/auth/signup
- POST : {emailId,password}
+ POST : {mobileNumber,password}
  RESPONSE : {Status,message}
 */
 
@@ -15,15 +15,15 @@ const signupHandler = async (req, res) => {
         return getResponse(res, 400, errorMessageUtil("Invalid Payload"));
     } 
 
-    const emailId = req.body.emailId;
+    const mobileNumber = req.body.mobileNumber;
     const password = req.body.password;
 
-    if(emailId && password) {
+    if(mobileNumber && password) {
         try {
-            const data = await userUtils.getUserDataWithEmail(emailId);
+            const data = await userUtils.getUserDataWithMobileNumber(mobileNumber);
 
             if(data) {
-                return getResponse(res, 403, errorMessageUtil("EmailId already exists"));
+                return getResponse(res, 403, errorMessageUtil("mobileNumber already exists"));
             }
 
             bcrypt.genSalt(SALT_ROUNDS, async (err, salt) => {
@@ -38,7 +38,7 @@ const signupHandler = async (req, res) => {
                         if (err) {
                             return getResponse(res, 501, errorMessageUtil("Internal Server Error while hashing."));
                         } else {
-                            const data = await userUtils.createUser(emailId, hash);
+                            const data = await userUtils.createUser(mobileNumber, hash);
                             return getResponse(res, 200, payloadUtil({message : "User created successfully"}));
                         }
                     }
