@@ -7,7 +7,8 @@
 
 //for edit patientId needs to be sent.
 {
-	"patientId": 1, 
+  "patientId": 1, 
+  "workerId": 101,
   "patientData": {
     "firstName": "Ananya",
     "lastName": "Rao",
@@ -15,15 +16,23 @@
     "city": "Bangalore",
     "languagePreference": "Kannada",
     "dateOfBirth": "1992-06-15",
-		"mobileNumber":"1234567890",
-    "deliveryDate": "2025-08-10"
+    "mobileNumber": "1234567890",
+    "employmentStatus": "Employed",
+    "religion": "Hindu",
+    "education": "Graduate",
+    "caste": "General",
+    "bloodGroup": "B+",
+    "previousIllness": "None",
+    "lmp": "2025-01-01"
   },
   "vitals": {
-    "workerId": 101,
     "bloodPressure": 120.5,
     "oxygen": 98.0,
+    "weight": 65.2,
     "temperature": 36.7,
     "sugarLevel": 90.5,
+    "bmi": 24.5,
+    "haemoglobin": "13.2",
     "checkupData": "{\"notes\": \"Patient in good condition, no complications\"}",
     "pregnancyStage": "Second Trimester",
     "checkupStatus": 0
@@ -32,25 +41,33 @@
 
 // for add patientId is neglected
 {
-    "patientData": {
-      "firstName": "Ananyaaa",
-      "lastName": "Rao",
-      "state": "Karnataka",
-      "city": "Bangalore",
-      "languagePreference": "Kannada",
-      "dateOfBirth": "1992-06-15",
-          "mobileNumber":"1234567890",
-      "deliveryDate": "2025-08-10"
-    },
-    "vitals": {
-      "workerId": 101,
-      "bloodPressure": 120.5,
-      "oxygen": 98.0,
-      "weight": 65.2,
-      "temperature": 36.7,
-      "sugarLevel": 90.5,
-      "checkupData": "{\"notes\": \"Patient in good condition, no complications\"}",
-      "pregnancyStage": "Second Trimester",
-      "checkupStatus": 0
-    }
+  "workerId": 101,
+  "patientData": {
+    "firstName": "Ananya",
+    "lastName": "Rao",
+    "state": "Karnataka",
+    "city": "Bangalore",
+    "languagePreference": "Kannada",
+    "dateOfBirth": "1992-06-15",
+    "mobileNumber": "1234567890",
+    "employmentStatus": "Employed",
+    "religion": "Hindu",
+    "education": "Graduate",
+    "caste": "General",
+    "bloodGroup": "B+",
+    "previousIllness": "None",
+    "lmp": "2025-01-01"
+  },
+  "vitals": {
+    "bloodPressure": 120.5,
+    "oxygen": 98.0,
+    "weight": 65.2,
+    "temperature": 36.7,
+    "sugarLevel": 90.5,
+    "bmi": 24.5,
+    "haemoglobin": "13.2",
+    "checkupData": "{\"notes\": \"Patient in good condition, no complications\"}",
+    "pregnancyStage": "Second Trimester",
+    "checkupStatus": 0
   }
+}

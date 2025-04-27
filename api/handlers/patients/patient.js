@@ -89,23 +89,6 @@ const fetchAllPatients = async (req, res) => {
     }
 }
 
-function calculateDueDate(patientData) {
-    const lmp = patientData.lmp;
-    if (!lmp) {
-        throw new Error('LMP (Last Menstrual Period) date is required.');
-    }
-
-    const lmpDate = new Date(lmp);
-    const dueDate = new Date(lmpDate);
-    dueDate.setDate(dueDate.getDate() + 280); 
-
-    patientData.deliveryDate = dueDate.toISOString().split('T')[0]; 
-    delete patientData.lmp;
-
-    return patientData;
-}
-
-
 async function calculateDueDateAndScheduleAppointments(patientData, workerId) {
     const lmp = patientData.lmp;
 
@@ -121,7 +104,6 @@ async function calculateDueDateAndScheduleAppointments(patientData, workerId) {
     delete patientData.lmp;
 
     const savedPatient = await Patient.create(patientData);
-    console.log(savedPatient);
     const savedPatientData = savedPatient.dataValues
 
     const patientId = savedPatientData.patientId;
@@ -135,19 +117,18 @@ async function calculateDueDateAndScheduleAppointments(patientData, workerId) {
     const appointmentsToSchedule = [];
 
     const appointmentWindows = [
-        { visit: 1, minWeek: 0, maxWeek: 12, offsetFromLmp: 8 },  // around 8 weeks
-        { visit: 2, minWeek: 14, maxWeek: 26, offsetFromLmp: 20 }, // around 20 weeks
-        { visit: 3, minWeek: 28, maxWeek: 34, offsetFromLmp: 30 }, // around 30 weeks
-        { visit: 4, minWeek: 36, maxWeek: 40, offsetFromLmp: 37 }, // around 37 weeks
+        { visit: 1, minWeek: 0, maxWeek: 12, offsetFromLmp: 8 },  
+        { visit: 2, minWeek: 14, maxWeek: 26, offsetFromLmp: 20 },
+        { visit: 3, minWeek: 28, maxWeek: 34, offsetFromLmp: 30 }, 
+        { visit: 4, minWeek: 36, maxWeek: 40, offsetFromLmp: 37 },
     ];
 
     appointmentWindows.forEach(({ visit, minWeek, maxWeek, offsetFromLmp }) => {
         if (diffInWeeks < maxWeek) {
             const appointmentDate = new Date(lmpDate);
-            appointmentDate.setDate(appointmentDate.getDate() + offsetFromLmp * 7); // convert weeks to days
+            appointmentDate.setDate(appointmentDate.getDate() + offsetFromLmp * 7);
 
             appointmentsToSchedule.push({
-                workerId: patientData.workerId,  // assume you get workerId from patientData or elsewhere
                 patientId: patientId,
                 appointmentDate: appointmentDate,
                 appointmentStatus: 'Saved',
