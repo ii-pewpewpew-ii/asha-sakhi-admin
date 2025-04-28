@@ -62,7 +62,6 @@ const savePatient = async (req, res) => {
 
 const fetchAllPatients = async (req, res) => {
     try {
-        const patientList = [];
         const workerId = req.params.workerId
         let data = null;
 
@@ -73,15 +72,23 @@ const fetchAllPatients = async (req, res) => {
                     workerId: workerId
                 }
             });
-            data.forEach((val) => {
-                patientList.push(val.dataValues);
-            })
-            return responseUtil.getResponse(res, 200, responseUtil.payloadUtil(patientList))
+        } else {
+            data = await Patient.findAll();
         }
-        data = await Patient.findAll();
-        data.forEach((val) => {
-            patientList.push(val.dataValues);
-        })
+        const patientList = await Promise.all(
+            data.map(async (val) => {
+                const checkupHistory = await Checkup.findAll({
+                    where: { patientId: val.patientId }
+                });
+
+                const checkupRecords = checkupHistory.map(record => record.dataValues);
+
+                return { 
+                    ...val.dataValues, 
+                    checkupData: checkupRecords 
+                };
+            })
+        );
         return responseUtil.getResponse(res, 200, responseUtil.payloadUtil(patientList))
     } catch (err) {
         console.error(err);

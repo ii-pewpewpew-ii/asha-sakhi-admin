@@ -1,0 +1,28 @@
+doctor1 : {
+    "mobileNumber": "1234567890",
+    "password": "password"  
+}
+  
+worker1: {
+    "mobileNumber": "98765432124",
+    "password": "securepassword"
+}
+// response
+{
+	"data": {
+		"message": "Logged in successfully.",
+		"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTcsInJvbGUiOiJXT1JLRVIiLCJpYXQiOjE3NDU4Mzg2OTAsImV4cCI6MTc0NTg0MTA5MH0.aXrK4o0MVvwnfQD_bFgV9hrwOVRhYciCwFAsehJ1JsE",
+		"profile": {
+			"firstName": "Jane",
+			"lastName": "Smith",
+			"profileId": 13,
+			"workerId": 3,
+			"state": "California",
+			"city": "Los Angeles",
+			"languagePreference": "English, Spanish",
+			"specialization": "Community Health",
+			"createdAt": "2025-04-28T10:47:37.289Z",
+			"updatedAt": "2025-04-28T10:47:37.289Z"
+		}
+	}
+}

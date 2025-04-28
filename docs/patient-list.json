@@ -7,29 +7,23 @@
 	"data": [
 		{
 			"patientId": 1,
-			"state": "Tamil Nadu",
+			"state": "TN",
 			"city": "Chennai",
 			"languagePreference": "Tamil",
-			"firstName": "Anjali",
-			"lastName": "Ravi",
-			"dateOfBirth": "1990-05-14T18:30:00.000Z",
-			"deliveryDate": "2025-08-19T18:30:00.000Z",
-			"mobileNumber": "9876543210",
-			"createdAt": "2025-04-22T04:30:00.000Z",
-			"updatedAt": "2025-04-22T04:30:00.000Z"
-		},
-		{
-			"patientId": 2,
-			"state": "Tamil Nadu",
-			"city": "Chennai",
-			"languagePreference": "Tamil",
-			"firstName": "Anjali",
-			"lastName": "Ravi",
-			"dateOfBirth": "1990-05-14T18:30:00.000Z",
-			"deliveryDate": "2025-08-19T18:30:00.000Z",
-			"mobileNumber": "9876543210",
-			"createdAt": "2025-04-22T04:30:00.000Z",
-			"updatedAt": "2025-04-22T04:30:00.000Z"
+			"firstName": "Joe",
+			"lastName": "Doe",
+			"dateOfBirth": "2025-04-09T00:00:00.000Z",
+			"deliveryDate": "2025-06-11T00:00:00.000Z",
+			"mobileNumber": "+918778794291",
+			"employmentStatus": null,
+			"religion": null,
+			"education": null,
+			"caste": null,
+			"bloodGroup": null,
+			"previousIllness": null,
+			"createdAt": "2025-04-27T17:44:48.338Z",
+			"updatedAt": "2025-04-27T17:44:48.338Z",
+			"checkupData": []
 		}
 	]
 }

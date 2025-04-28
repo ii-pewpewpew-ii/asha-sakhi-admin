@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const { userUtils, roleUtil, UserProfile } = require("../../models/user");
 const { getResponse, errorMessageUtil, payloadUtil } = require("../../utils/responseUtil");
 const JWTDetails = require("../../config/jwt");
+const { Doctor, Worker } = require("../../models/entities");
 
 /*
  PATHS : /api/auth/login
@@ -42,18 +43,30 @@ const loginHandler = async (req, res) => {
                             where: {
                                 userId: id
                             },
-                            attributes: ['firstName', 'lastName']
+                            attributes: ['firstName', 'lastName', 'profileId']
                         });
+                        let data =  await Doctor.findOne({
+                            where: {
+                                profileId: userProfile.dataValues.profileId
+                            }
+                        });
+                        if(!data) {
+                            data = await Worker.findOne({
+                                where: {
+                                    profileId: userProfile.dataValues.profileId
+                                }
+                            })
+                        }
 
                         var token = jwt.sign({id, role}, JWTDetails.secret, {expiresIn : JWTDetails.jwtExpiration});
                         res.set("x-access-token", token);
                         return getResponse(res, 200, payloadUtil({
                             message: "Logged in successfully.",
                             token: token,
-                            profile: userProfile ? {
+                            profile: userProfile ? {...{
                                 firstName: userProfile.firstName,
                                 lastName: userProfile.lastName
-                            } : null
+                            }, ...data.dataValues} : null
                         }));
                     } else {
                         return getResponse(res, 401, errorMessageUtil("Incorrect password."))
