@@ -11,18 +11,10 @@ const savePatient = async (req, res) => {
         let patientId = req.body.patientId;
         if (!patientId) {
             // Create Patient record, and checkup 0
-            const vitals = req.body.vitals;
-            vitals.workerId = req.body.workerId;
             const patientData = await calculateDueDateAndScheduleAppointments(req.body.patientData, req.body.workerId);
             console.log("Patient Profile created successfully");
             patientId = patientData.patientId;
-            if (vitals) {
-                const checkupData = await Checkup.create({ ...vitals, ...{ patientId: patientId, checkupStatus: 0 } });
-                console.log("Vitals and test results stored successfully");
-                return responseUtil.getResponse(res, 200, responseUtil.payloadUtil("Vitals stored successfully"));
-            } else {
-                return responseUtil.getResponse(res, 200, responseUtil.payloadUtil("Patient profile created successfully"));
-            }
+            return responseUtil.getResponse(res, 200, responseUtil.payloadUtil({message: "Patient profile created successfully", patientId: patientId}));
         } else {
             // Update existing patient record
             const patientData = req.body.patientData;
@@ -31,29 +23,9 @@ const savePatient = async (req, res) => {
                     where: { patientId: patientId }
                 });
             }
-            const vitals = req.body.vitals;
-            if (vitals) {
-                // Update the latest Checkup record with checkupStatus = 0
-                const checkupRecord = await Checkup.findOne({
-                    where: { patientId: patientId, checkupStatus: 0 },
-                    order: [['createdAt', 'DESC']]
-                });
-
-                if (checkupRecord) {
-                    await Checkup.update(
-                        vitals,
-                        { where: { checkupId: checkupRecord.checkupId } }
-                    );
-                    console.log("Vitals updated successfully");
-                    return responseUtil.getResponse(res, 200, responseUtil.payloadUtil("Vitals updated successfully"));
-                } else {
-                    console.log("No open checkup found for this patient");
-                    return responseUtil.getResponse(res, 404, responseUtil.errorMessageUtil("No checkup record found for update"));
-                }
-            } else {
-                return responseUtil.getResponse(res, 200, responseUtil.payloadUtil("Patient profile updated successfully"));
-            }
-        }
+            return responseUtil.getResponse(res, 200, responseUtil.payloadUtil({message: "Patient profile updated successfully", patientId: patientId}));
+            
+        }  
     } catch (err) {
         console.error(err);
         return responseUtil.getResponse(res, 501, responseUtil.errorMessageUtil(err))
