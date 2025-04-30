@@ -1,7 +1,7 @@
 const express = require("express");
-
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() }).single("documents");
 const {patientHandler} = require("../handlers")
-
 const router = express.Router();
 
 
@@ -31,7 +31,7 @@ const router = express.Router();
  *                                      type: string
  */
 
-router.get("/patient-list", patientHandler.fetchAllPatients);
+router.get("/patient-list",upload, patientHandler.fetchAllPatients);
 
 
 /**
@@ -75,5 +75,12 @@ router.get("/patient-list", patientHandler.fetchAllPatients);
  *              description: Invalid input
  */
 router.post("/save-patient", patientHandler.savePatient);
+
+
+router.post("/save-checkup",upload, patientHandler.checkupHandler);
+// router.post("/save-checkup", (req, res)=>{
+//     console.log(req);
+//     return res.status(200);
+// });
 
 module.exports = router;

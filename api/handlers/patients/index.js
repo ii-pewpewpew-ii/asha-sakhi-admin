@@ -1,3 +1,3 @@
 const { fetchAllPatients, savePatient } = require("./patient");
-
-module.exports = {fetchAllPatients, savePatient};
+const { checkupHandler } = require("./checkup");
+module.exports = { fetchAllPatients, savePatient, checkupHandler };

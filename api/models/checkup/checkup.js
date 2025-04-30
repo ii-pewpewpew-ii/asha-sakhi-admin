@@ -56,6 +56,10 @@ const Checkup = connection.define("TBL_CHECKUP", {
         type: DataTypes.TEXT
     },
 
+    checkupType: {
+        type: DataTypes.TEXT
+    },
+
     checkupStatus: {
         type: DataTypes.INTEGER
     },
