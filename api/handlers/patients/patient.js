@@ -1,6 +1,8 @@
 const { Patient } = require("../../models/entities");
 const { Checkup, Appointment } = require("../../models/checkup");
+const { PatientWorkerMap } = require("../../models/user");
 const { responseUtil } = require('../../utils')
+const { Op } = require("sequelize");
 
 
 const savePatient = async (req, res) => {
@@ -14,18 +16,18 @@ const savePatient = async (req, res) => {
             const patientData = await calculateDueDateAndScheduleAppointments(req.body.patientData, req.body.workerId);
             console.log("Patient Profile created successfully");
             patientId = patientData.patientId;
-            return responseUtil.getResponse(res, 200, responseUtil.payloadUtil({message: "Patient profile created successfully", patientData: patientData}));
+            return responseUtil.getResponse(res, 200, responseUtil.payloadUtil({ message: "Patient profile created successfully", patientData: patientData }));
         } else {
             // Update existing patient record
             const patientData = req.body.patientData;
-            if (patientData) {    
+            if (patientData) {
                 await Patient.update(patientData, {
                     where: { patientId: patientId }
                 });
             }
-            return responseUtil.getResponse(res, 200, responseUtil.payloadUtil({message: "Patient profile updated successfully", patientId: patientId}));
-            
-        }  
+            return responseUtil.getResponse(res, 200, responseUtil.payloadUtil({ message: "Patient profile updated successfully", patientData: patientData }));
+
+        }
     } catch (err) {
         console.error(err);
         return responseUtil.getResponse(res, 501, responseUtil.errorMessageUtil(err))
@@ -39,9 +41,22 @@ const fetchAllPatients = async (req, res) => {
 
         // TODO : fetch from Worker patient map and then filter out based on workerId
         if (workerId) {
-            data = await Patient.findAll({
+            let patientIds = PatientWorkerMap.findAll({
                 where: {
                     workerId: workerId
+                }
+            }).then((val) => {
+                const patientIds = [];
+                val.forEach((record) => {
+                    patientIds.push(record.dataValues.patientId);
+                })
+                return patientIds;
+            })
+            data = await Patient.findAll({
+                where: {
+                    workerId: {
+                        [Op.in] : patientIds
+                   }
                 }
             });
         } else {
@@ -55,9 +70,9 @@ const fetchAllPatients = async (req, res) => {
 
                 const checkupRecords = checkupHistory.map(record => record.dataValues);
 
-                return { 
-                    ...val.dataValues, 
-                    checkupData: checkupRecords 
+                return {
+                    ...val.dataValues,
+                    checkupData: checkupRecords
                 };
             })
         );
@@ -77,15 +92,19 @@ async function calculateDueDateAndScheduleAppointments(patientData, workerId) {
 
     const lmpDate = new Date(lmp);
     const dueDate = new Date(lmpDate);
-    dueDate.setDate(dueDate.getDate() + 280); 
+    dueDate.setDate(dueDate.getDate() + 280);
 
     patientData.deliveryDate = dueDate.toISOString().split('T')[0];
     delete patientData.lmp;
 
     const savedPatient = await Patient.create(patientData);
     const savedPatientData = savedPatient.dataValues
-
     const patientId = savedPatientData.patientId;
+
+    await PatientWorkerMap.create({
+        patientId: patientId,
+        workerId: workerId
+    });
 
     const today = new Date();
     const diffInMs = today - lmpDate;
@@ -96,9 +115,9 @@ async function calculateDueDateAndScheduleAppointments(patientData, workerId) {
     const appointmentsToSchedule = [];
 
     const appointmentWindows = [
-        { visit: 1, minWeek: 0, maxWeek: 12, offsetFromLmp: 8 },  
+        { visit: 1, minWeek: 0, maxWeek: 12, offsetFromLmp: 8 },
         { visit: 2, minWeek: 14, maxWeek: 26, offsetFromLmp: 20 },
-        { visit: 3, minWeek: 28, maxWeek: 34, offsetFromLmp: 30 }, 
+        { visit: 3, minWeek: 28, maxWeek: 34, offsetFromLmp: 30 },
         { visit: 4, minWeek: 36, maxWeek: 40, offsetFromLmp: 37 },
     ];
 
@@ -122,7 +141,7 @@ async function calculateDueDateAndScheduleAppointments(patientData, workerId) {
     }
 
     await Appointment.bulkCreate(appointmentsToSchedule);
-    
+
     console.log('Appointments scheduled successfully.');
     return savedPatientData;
 }
