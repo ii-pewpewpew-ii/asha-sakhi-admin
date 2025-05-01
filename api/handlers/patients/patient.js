@@ -14,7 +14,7 @@ const savePatient = async (req, res) => {
             const patientData = await calculateDueDateAndScheduleAppointments(req.body.patientData, req.body.workerId);
             console.log("Patient Profile created successfully");
             patientId = patientData.patientId;
-            return responseUtil.getResponse(res, 200, responseUtil.payloadUtil({message: "Patient profile created successfully", patientId: patientId}));
+            return responseUtil.getResponse(res, 200, responseUtil.payloadUtil({message: "Patient profile created successfully", patientData: patientData}));
         } else {
             // Update existing patient record
             const patientData = req.body.patientData;
