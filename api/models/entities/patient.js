@@ -62,9 +62,13 @@ const Patient = connection.define("TBL_PROFILE_PATIENT", {
     caste: {
         type: DataTypes.TEXT
     },
-    
+
     bloodGroup: {
         type: DataTypes.TEXT
+    },
+
+    lmp: {
+        type: DataTypes.DATE
     },
 
     previousIllness: {

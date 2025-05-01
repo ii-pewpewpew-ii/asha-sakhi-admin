@@ -95,7 +95,6 @@ async function calculateDueDateAndScheduleAppointments(patientData, workerId) {
     dueDate.setDate(dueDate.getDate() + 280);
 
     patientData.deliveryDate = dueDate.toISOString().split('T')[0];
-    delete patientData.lmp;
 
     const savedPatient = await Patient.create(patientData);
     const savedPatientData = savedPatient.dataValues
