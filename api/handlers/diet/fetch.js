@@ -1,0 +1,3 @@
+const getDietFromLLM = (req, res)=> {
+    
+}

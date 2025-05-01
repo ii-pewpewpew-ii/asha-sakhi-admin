@@ -31,7 +31,7 @@ const router = express.Router();
  *                                      type: string
  */
 
-router.get("/patient-list",upload, patientHandler.fetchAllPatients);
+router.get("/patient-list", patientHandler.fetchAllPatients);
 
 
 /**
