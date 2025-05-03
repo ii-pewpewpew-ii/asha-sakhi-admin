@@ -3,6 +3,10 @@ const { Checkup, Appointment } = require("../../models/checkup");
 const { PatientWorkerMap } = require("../../models/user");
 const { responseUtil } = require('../../utils')
 const { Op } = require("sequelize");
+const { errorMessageUtil, payloadUtil } = require("../../utils/responseUtil");
+const { default: axios } = require("axios");
+const dotenv = require("dotenv");
+dotenv.config();
 
 
 const savePatient = async (req, res) => {
@@ -55,8 +59,8 @@ const fetchAllPatients = async (req, res) => {
             data = await Patient.findAll({
                 where: {
                     workerId: {
-                        [Op.in] : patientIds
-                   }
+                        [Op.in]: patientIds
+                    }
                 }
             });
         } else {
@@ -149,8 +153,35 @@ async function updateBirth(req, res) {
 
 }
 
+async function fetchSchemes(req, res) {
+    try {
+        const patientId = req.body.patientId;
+        const patientData = await Patient.findOne({
+            where: {
+                patientId: patientId
+            }
+        }).then((val) => {
+            return val.dataValues
+        }).catch((err) => {
+            console.error(err);
+            return responseUtil(res, 501, errorMessageUtil("Failed to return response" + err.message));
+        })
+        const URL = process.env.LLM_API_ENDPOINT + "/search/";
+        axios.post(URL, { query: JSON.stringify(patientData) }).then((res) => {
+            return responseUtil(res, 200, payloadUtil(res.data));
+        }).catch((err) => {
+            console.error(err);
+            return responseUtil(res, 501, errorMessageUtil("Failed to return response" + err.message));
+        });
+    } catch (err) {
+        console.error(err);
+        return responseUtil(res, 501, errorMessageUtil("Failed to return response" + err.message));
+    }
+}
+
 
 module.exports = {
     fetchAllPatients,
-    savePatient
+    savePatient,
+    fetchSchemes
 };

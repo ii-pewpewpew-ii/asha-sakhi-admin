@@ -17,6 +17,7 @@ const checkupHandler = async (req, res) => {
             sugarLevel,
             bmi,
             haemoglobin,
+            checkupType,
             photos,
             checkupData,
             pregnancyStage,
@@ -37,6 +38,7 @@ const checkupHandler = async (req, res) => {
             sugarLevel,
             bmi,
             haemoglobin,
+            checkupType,
             checkupData,
             pregnancyStage,
             checkupStatus
@@ -67,7 +69,7 @@ const checkupHandler = async (req, res) => {
 }
 
 const uploadPhotos = async (photos, checkupId) => {
-    
+
 }
 
 const uploadDocuments = async (files, checkupId) => {
