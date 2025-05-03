@@ -3,6 +3,7 @@ const { Checkup } = require("../../models/checkup");
 const { Document } = require("../../models/checkup");
 const { Patient } = require("../../models/entities");
 const {uploadSingleFileToBunny} = require("./document");
+const Photos = require("../../models/checkup/photos");
 
 const checkupHandler = async (req, res) => {
     const data = JSON.parse(req.body.data);
@@ -19,6 +20,7 @@ const checkupHandler = async (req, res) => {
             haemoglobin,
             checkupType,
             photos,
+            checkupTime,
             checkupData,
             pregnancyStage,
             checkupStatus,
@@ -37,6 +39,7 @@ const checkupHandler = async (req, res) => {
             temperature,
             sugarLevel,
             bmi,
+            checkupTime,
             haemoglobin,
             checkupType,
             checkupData,
@@ -54,6 +57,12 @@ const checkupHandler = async (req, res) => {
         let files = req.files;
         if(!files){
             files = [req.file];
+        }
+
+        if(photos){
+            await Photos.bulkCreate({
+
+            })
         }
         await uploadDocuments(files, checkupId);
         

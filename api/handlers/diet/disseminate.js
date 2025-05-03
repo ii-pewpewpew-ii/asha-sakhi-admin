@@ -3,7 +3,7 @@ const { Patient, Worker } = require("../../models/entities");
 const client = require('../../config/twilio');
 const dotenv = require("dotenv");
 const { getResponse, errorMessageUtil } = require("../../utils/responseUtil");
-const getDietFromLLM = require("./fetch");
+const {getDietFromLLM, fetchDietData} = require("./fetch");
 dotenv.config();
 
 const data = {

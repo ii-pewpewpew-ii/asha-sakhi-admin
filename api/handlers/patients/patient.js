@@ -6,6 +6,7 @@ const { Op } = require("sequelize");
 const { errorMessageUtil, payloadUtil } = require("../../utils/responseUtil");
 const { default: axios } = require("axios");
 const dotenv = require("dotenv");
+const { PROFILE_PHOTO } = require("../../constants/apiConstants");
 dotenv.config();
 
 
@@ -14,6 +15,9 @@ const savePatient = async (req, res) => {
         return responseUtil.getResponse(res, 501, responseUtil.errorMessageUtil("Invalid request"));
     }
     try {
+        if(!req.body.profilePhoto){
+            req.body.profilePhoto = PROFILE_PHOTO;
+        }
         let patientId = req.body.patientId;
         if (!patientId) {
             // Create Patient record, and checkup 0
