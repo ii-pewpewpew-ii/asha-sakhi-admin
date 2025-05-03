@@ -15,7 +15,7 @@ const scheduleJobs = (req, res) => {
 };
 
 function schedulePing() {
-    const URL="https://asha-sakhi-admin.onrender.com"
+    const URL="https://asha-sakhi-admin.onrender.com/api/ping"
     cron.schedule("30 4 * * * *", async () => {
         axios.get(URL).then((res)=>{
             console.log("[CRON] Ping from client. Keeping server alive.");
