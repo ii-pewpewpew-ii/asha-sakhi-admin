@@ -58,6 +58,11 @@ const fetchDietData = async (req, res) => {
                 return getResponse(res, 501, errorMessageUtil("Server Error." + err.message));
             });
             let dietData = await getDietFromLLM(patientData);
+            // console.log("heeeee", patientId);
+            await Diet.create({
+                dietData: JSON.stringify(dietData),
+                patientId: patientId
+            });
             return getResponse(res, 200, payloadUtil(dietData));
         } else {
             return getResponse(res, 200, payloadUtil(dietData));

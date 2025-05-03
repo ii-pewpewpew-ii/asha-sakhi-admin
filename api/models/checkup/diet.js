@@ -11,8 +11,8 @@ const Diet = connection.define("TBL_PATIENT_DIET", {
 
     dietId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         primaryKey: true,
+        autoIncrement: true
     },
 
     dietData: {
