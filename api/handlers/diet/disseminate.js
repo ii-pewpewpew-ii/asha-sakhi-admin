@@ -3,6 +3,7 @@ const { Patient, Worker } = require("../../models/entities");
 const client = require('../../config/twilio');
 const dotenv = require("dotenv");
 const { getResponse, errorMessageUtil } = require("../../utils/responseUtil");
+const {getDietFromLLM, fetchDietData} = require("./fetch");
 dotenv.config();
 
 const data = {
@@ -22,7 +23,13 @@ const data = {
 const disseminateDiet = async (req, res) => {
     try {
         const patientId = req.body.patientId;
-
+        const patientData = await Patient.findOne({
+            where: {
+                patientId: patientId
+            }
+        }).then((val)=>{
+            return val.dataValues
+        });
         const workerId = await PatientWorkerMap.findOne({
             where: {
                 patientId: patientId
@@ -55,9 +62,9 @@ const disseminateDiet = async (req, res) => {
             return val.dataValues.mobileNumber;
         })
         // fetch diet data from FastAPI
-        const dietData = data["diet_plan"];
-        const messages = splitMessageIntoParts(JSON.stringify(dietData));
-        
+        const diet_data = await getDietFromLLM(patientData);   
+        const messages = splitMessageIntoParts(JSON.stringify(diet_data));
+         
         messages.forEach(async (msg, i) => {
           let messageBody = msg;
           console.log("ASHASAKHI DIET" + ' ' + `${messages.length}` + ' ' + `${i}` + ' ' + messageBody);

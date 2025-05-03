@@ -1,34 +1,28 @@
 const cron = require('node-cron');
-const axios = require('axios');
-
-const { appointmentHandlers } = require('../handlers'); // import your handlers
-const responseUtil = require("./responseUtil")
+const {appointmentHandlers} = require('../handlers'); // import your handlers
+const responseUtil = require("./responseUtil");
+const { default: axios } = require('axios');
 
 const scheduleJobs = async (req, res) => {
     // cron.schedule('10 * * * * *', async () => {
     //     console.log('[CRON] Triggering Appointment jobs for the day');
     //     await appointmentHandlers.sendAppointmentReminders();
     // });
-    await pingCron();
-
+    schedulePing();
     console.log("[CRON] jobs setup")
 
     return responseUtil.getResponse(res, 200, "Cron started successfully")
 };
 
-const pingCron = async () => {
-    console.log("[CRON-PING] Seting up Ping endpoint");
-    cron.schedule('30 5 * * * *', async () => {
-    const URL = "https://asha-sakhi-admin.onrender.com/api/ping"
-    // const URL = "http://localhost:8080/api/ping"
-    axios.get(URL)
-      .then(response => {
-        console.log('Response:', response.data);
-      })
-      .catch(error => {
-        console.error('Error:', error.message);
-      });
-    })
+function schedulePing() {
+    const URL="https://asha-sakhi-admin.onrender.com/api/ping"
+    cron.schedule("30 4 * * * *", async () => {
+        axios.get(URL).then((res)=>{
+            console.log("[CRON] Ping from client. Keeping server alive.");
+        }).catch((err)=>{
+            console.error(err);
+        })
+    });
 }
 
 module.exports = {

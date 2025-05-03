@@ -1,4 +1,4 @@
 const disseminateDiet = require("./disseminate");
-const fetchDiet = require("./fetch");
+const {fetchDietData, getDietFromLLM } = require("./fetch");
 
-module.exports = {disseminateDiet, fetchDiet};
+module.exports = {disseminateDiet, fetchDietData, getDietFromLLM};

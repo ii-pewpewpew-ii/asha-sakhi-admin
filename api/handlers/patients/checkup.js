@@ -3,6 +3,7 @@ const { Checkup } = require("../../models/checkup");
 const { Document } = require("../../models/checkup");
 const { Patient } = require("../../models/entities");
 const {uploadSingleFileToBunny} = require("./document");
+const Photos = require("../../models/checkup/photos");
 
 const checkupHandler = async (req, res) => {
     const data = JSON.parse(req.body.data);
@@ -17,6 +18,9 @@ const checkupHandler = async (req, res) => {
             sugarLevel,
             bmi,
             haemoglobin,
+            checkupType,
+            photos,
+            checkupTime,
             checkupData,
             pregnancyStage,
             checkupStatus,
@@ -35,7 +39,9 @@ const checkupHandler = async (req, res) => {
             temperature,
             sugarLevel,
             bmi,
+            checkupTime,
             haemoglobin,
+            checkupType,
             checkupData,
             pregnancyStage,
             checkupStatus
@@ -52,22 +58,14 @@ const checkupHandler = async (req, res) => {
         if(!files){
             files = [req.file];
         }
-        const documentResult = [];
-        for (const file of files) {
-            const result = await uploadSingleFileToBunny(file, patientName, checkupId);
-            documentResult.push(result);
-          }
 
-        if (documentResult) {
-            const documentData = documentResult.map(doc => ({
-                checkupId: checkupId,
-                documentPath: doc.documentPath,
-                documentName: doc.documentName
-            }));
+        if(photos){
+            await Photos.bulkCreate({
 
-            await Document.bulkCreate(documentData);
+            })
         }
-
+        await uploadDocuments(files, checkupId);
+        
         return getResponse(res, 201, payloadUtil({
             message: "Checkup and documents saved successfully",
             checkup: checkupId
@@ -77,6 +75,29 @@ const checkupHandler = async (req, res) => {
         console.error("Error in checkupHandler:", err);
         return getResponse(res, 501, errorMessageUtil(err.message));
     }
+}
+
+const uploadPhotos = async (photos, checkupId) => {
+
+}
+
+const uploadDocuments = async (files, checkupId) => {
+    const documentResult = [];
+    for (const file of files) {
+        const result = await uploadSingleFileToBunny(file, patientName, checkupId);
+        documentResult.push(result);
+      }
+
+    if (documentResult) {
+        const documentData = documentResult.map(doc => ({
+            checkupId: checkupId,
+            documentPath: doc.documentPath,
+            documentName: doc.documentName
+        }));
+
+        await Document.bulkCreate(documentData);
+    }
+
 }
 
 module.exports = { checkupHandler }

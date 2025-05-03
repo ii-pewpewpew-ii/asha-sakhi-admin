@@ -55,6 +55,14 @@ const Patient = connection.define("TBL_PROFILE_PATIENT", {
         type: DataTypes.TEXT
     },
 
+    latitude: {
+        type: DataTypes.TEXT
+    },
+
+    longtitude: {
+        type: DataTypes.TEXT
+    },
+
     education: {
         type: DataTypes.TEXT
     },
@@ -74,6 +82,14 @@ const Patient = connection.define("TBL_PROFILE_PATIENT", {
     previousIllness: {
         type: DataTypes.TEXT
     },
+
+    profilePhoto: {
+        type: DataTypes.TEXT
+    },
+
+    pregnancyStage: {
+        type: DataTypes.TEXT
+    }
 
 }, {
     freezeTableName: true

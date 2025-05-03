@@ -78,9 +78,9 @@ router.post("/save-patient", patientHandler.savePatient);
 
 
 router.post("/save-checkup",upload, patientHandler.checkupHandler);
-// router.post("/save-checkup", (req, res)=>{
-//     console.log(req);
-//     return res.status(200);
-// });
+
+router.get("/fetch-schemes", patientHandler.fetchSchemes)
+
+// router.post("/update-birth",);
 
 module.exports = router;
