@@ -30,6 +30,11 @@ const Appointment = connection.define("TBL_APPOINTMENT", {
     appointmentStatus: {
         type: DataTypes.TEXT,
         allowNull: false
+    },
+
+    appointmentType: {
+        type: DataTypes.TEXT,
+        allowNull: false
     }
 }, {
     freezeTableName: true

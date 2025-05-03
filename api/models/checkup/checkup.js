@@ -63,6 +63,10 @@ const Checkup = connection.define("TBL_CHECKUP", {
     checkupStatus: {
         type: DataTypes.INTEGER
     },
+
+    checkupTime: {
+        type: DataTypes.DATE
+    }
 }, {
     freezeTableName: true
 });

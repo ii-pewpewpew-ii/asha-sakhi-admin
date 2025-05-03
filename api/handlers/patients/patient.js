@@ -145,6 +145,10 @@ async function calculateDueDateAndScheduleAppointments(patientData, workerId) {
     return savedPatientData;
 }
 
+async function updateBirth(req, res) {
+
+}
+
 
 module.exports = {
     fetchAllPatients,
