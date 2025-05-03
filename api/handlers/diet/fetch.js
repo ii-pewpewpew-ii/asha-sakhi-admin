@@ -15,7 +15,6 @@ const getDietFromLLM = async (patientData) => {
             }
         }
     ).then((val)=>{
-        console.log(val);
         return val.data;
 
     }).catch((err)=>{
@@ -27,7 +26,6 @@ const getDietFromLLM = async (patientData) => {
 const fetchDietData = async (req, res) => {
     try {
         const patientId = req.query.patientId;
-        console.log(req.params);
         let dietData = await Diet.findOne({
             where: {
                 patientId: patientId
@@ -37,7 +35,7 @@ const fetchDietData = async (req, res) => {
                 console.log("here");
                 return null;
             }
-            return val.dataValues.dietData;
+            return JSON.parse(val.dataValues.dietData);
         }).catch((err)=>{
             console.error(err);
             return getResponse(res, 501, errorMessageUtil("Server Error." + err.message));
@@ -58,7 +56,6 @@ const fetchDietData = async (req, res) => {
                 return getResponse(res, 501, errorMessageUtil("Server Error." + err.message));
             });
             let dietData = await getDietFromLLM(patientData);
-            // console.log("heeeee", patientId);
             await Diet.create({
                 dietData: JSON.stringify(dietData),
                 patientId: patientId
