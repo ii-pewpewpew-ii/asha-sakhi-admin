@@ -22,7 +22,6 @@ const data = {
 const disseminateDiet = async (req, res) => {
     try {
         const patientId = req.body.patientId;
-
         const workerId = await PatientWorkerMap.findOne({
             where: {
                 patientId: patientId

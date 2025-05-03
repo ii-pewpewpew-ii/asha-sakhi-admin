@@ -7,7 +7,7 @@ const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const dotenv = require("dotenv");
 dotenv.config();
-const { authRoutes, patientRoutes, cronRoutes, dietRoutes } = require("./routes");
+const { authRoutes, patientRoutes, cronRoutes, dietRoutes, pingRouter } = require("./routes");
 
 
 const app = express();
@@ -42,6 +42,8 @@ app.use('/api/patient', patientRoutes);
 app.use('/api/cron', cronRoutes);
 
 app.use('/api/diet', dietRoutes)
+
+app.use("/api/ping", pingRouter);
 
 utils.connection.sync().then(async () => {
     console.log("DB Synced");
