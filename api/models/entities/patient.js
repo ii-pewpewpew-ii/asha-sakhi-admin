@@ -75,6 +75,10 @@ const Patient = connection.define("TBL_PROFILE_PATIENT", {
         type: DataTypes.TEXT
     },
 
+    profilePhoto: {
+        type: DataTypes.TEXT
+    },
+
     pregnancyStage: {
         type: DataTypes.TEXT
     }
