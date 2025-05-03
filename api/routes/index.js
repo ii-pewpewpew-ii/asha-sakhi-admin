@@ -4,6 +4,7 @@ const cronRoutes = require("./cron")
 const dietRoutes = require("./diet");
 const pingRouter = require("./ping");
 const infantRoutes = require("./infant");
+const appointmentRoutes = require("./appointments");
 
 module.exports = { 
     authRoutes,
@@ -11,5 +12,6 @@ module.exports = {
     cronRoutes,
     dietRoutes,
     pingRouter, 
-    infantRoutes 
+    infantRoutes,
+    appointmentRoutes
 };
